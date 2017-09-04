@@ -27,8 +27,36 @@ $(function(){
         drawCallback: function() {
 			$(".API-update").click(function(e){
 				var id = $(e.target).attr("data-id");
-//				var formData = $("#api").DataTable().row(self.parents('tr')).data();
 				add();
+				var formData = $("#api").DataTable().row($(e.target).parents('tr')).data();
+				
+				for(var i in formData){
+					$("#"+i).val(formData[i]);
+				}
+				
+				$.ajax({
+					url:"paramslist",
+					method:"POST",
+					dataType:"json",
+					data:{
+						apiId:formData.id
+					},
+					success:function(data){
+						console.log(data)
+						if(data){
+							for(var i in data){
+								$("#paramstbody").append($("#example tr")[0].outerHTML);
+								for(var j in data[i]){
+									$("#paramstbody:eq("+i+") [name='"+j+"']").val(data[i][j]);
+								}
+							}
+							
+						}
+					}
+					
+				})
+//				var formData = $("#api").DataTable().row(self.parents('tr')).data();
+				
 			});
 			$(".API-delete").click(function(e){
 				var id = $(e.target).attr("data-id");
@@ -104,6 +132,7 @@ function cleanForm(){
 	for(var i = 0 ;i<saveTexts.length ; i++){
 		$(saveTexts[i]).val("");
 	}
+	$("#paramstbody").html("")
 }
 function list(){
 	$("#api").DataTable().ajax.reload(null,false);

@@ -54,4 +54,7 @@ public class Params {
 		this.paramsType = paramsType;
 		this.exampleParams = exampleParams;
 	}
+	public Params() {
+		super();
+	}
 }
