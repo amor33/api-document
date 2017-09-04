@@ -28,7 +28,7 @@ public class ApiDao {
 	public Api save(Api api) {
 		jdbcTemplate.update(saveSql,new Object[]{api.getCode(),api.getDiscription(),api.getExampleUri(),api.getName()
 				,api.getProject(),api.getResult(),api.getType(),api.getUri()});
-		return jdbcTemplate.queryForObject(saveReturnSql, new BeanPropertyRowMapper(Api.class),api.getCode());
+		return (Api) jdbcTemplate.queryForObject(saveReturnSql, new BeanPropertyRowMapper(Api.class),api.getCode());
 	}
 
 	public int delete(Long apiId) {
