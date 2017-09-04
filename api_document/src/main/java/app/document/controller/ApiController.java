@@ -40,7 +40,7 @@ public class ApiController {
     
     @RequestMapping("/save")
     public  Api save( Api api ,HttpServletRequest req){
-        return apiService.save(api,getParams(req)) ;
+        return apiService.update(api,getParams(req)) ;
     }
     
     private List<Params> getParams(HttpServletRequest req) {

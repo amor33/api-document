@@ -42,12 +42,11 @@ $(function(){
 						apiId:formData.id
 					},
 					success:function(data){
-						console.log(data)
 						if(data){
 							for(var i in data){
 								$("#paramstbody").append($("#example tr")[0].outerHTML);
 								for(var j in data[i]){
-									$("#paramstbody:eq("+i+") [name='"+j+"']").val(data[i][j]);
+									$("#paramstbody tr:eq("+i+") [name='"+j+"']").val(data[i][j]);
 								}
 							}
 							
@@ -93,10 +92,17 @@ function save(){
 			return false;
 		}
 	}
+	var saveDate = getFormJson("#paramsForm");
+	var paramsName = JSON.stringify(saveDate.paramsName);
+	var paramsType = JSON.stringify(saveDate.paramsType);
+	var exampleParams = JSON.stringify(saveDate.exampleParams);
+	saveDate.paramsName = paramsName.substring(1,paramsName.length - 1 );
+	saveDate.paramsType = paramsType.substring(1,paramsType.length - 1 );
+	saveDate.exampleParams = exampleParams.substring(1,exampleParams.length - 1 );
 	$.ajax({
         url: "save",
         type: "post",
-        data: getFormJson("#paramsForm"),
+        data: saveDate,
         success: function(data){
         		list();
         		if(data && data.id){
@@ -132,7 +138,8 @@ function cleanForm(){
 	for(var i = 0 ;i<saveTexts.length ; i++){
 		$(saveTexts[i]).val("");
 	}
-	$("#paramstbody").html("")
+	$("#result").val("");
+	$("#paramstbody").html("");
 }
 function list(){
 	$("#api").DataTable().ajax.reload(null,false);

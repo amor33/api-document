@@ -42,12 +42,11 @@ $(function(){
 						apiId:formData.id
 					},
 					success:function(data){
-						console.log(data)
 						if(data){
 							for(var i in data){
 								$("#paramstbody").append($("#example tr")[0].outerHTML);
 								for(var j in data[i]){
-									$("#paramstbody:eq("+i+") [name='"+j+"']").val(data[i][j]);
+									$("#paramstbody tr:eq("+i+") [name='"+j+"']").val(data[i][j]);
 								}
 							}
 							
@@ -139,7 +138,8 @@ function cleanForm(){
 	for(var i = 0 ;i<saveTexts.length ; i++){
 		$(saveTexts[i]).val("");
 	}
-	$("#paramstbody").html("")
+	$("#result").val("");
+	$("#paramstbody").html("");
 }
 function list(){
 	$("#api").DataTable().ajax.reload(null,false);
