@@ -10,7 +10,7 @@
 	<name>document</name>
 	<url>http://maven.apache.org</url>
 
-	<parent>
+	<parent> 
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.2.RELEASE</version>
@@ -79,5 +79,25 @@
 			<version>1.0.26</version>
 		</dependency>
 	</dependencies>
-
+	
+	<build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>
+				<archive>
+					<manifest>
+						<mainClass>app.document.Application</mainClass>
+						<addClasspath>true</addClasspath>
+						<classpathPrefix>lib/</classpathPrefix>
+					</manifest>
+				</archive>
+				<classesDirectory>
+				</classesDirectory>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>  
+	
 </project>
