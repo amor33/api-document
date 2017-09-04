@@ -50,7 +50,9 @@ public class ApiController {
     			String[] paramsName = req.getParameter("paramsName").split(",");
     			String[] exampleParams = req.getParameter("exampleParams").split(",");
     			for(int i = 0 ; i<paramsType.length; i++){
-    				params.add( new Params(paramsName[i],paramsType[i],exampleParams[i]));
+    				params.add( new Params(paramsName[i].substring(1,paramsName[i].length() - 1),
+    						paramsType[i].substring(1,paramsType[i].length() - 1),
+    						exampleParams[i].substring(1,exampleParams[i].length() - 1)));
     			}
     		}
 		return params.isEmpty() ? null : params;
