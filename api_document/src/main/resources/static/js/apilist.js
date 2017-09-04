@@ -93,10 +93,17 @@ function save(){
 			return false;
 		}
 	}
+	var saveDate = getFormJson("#paramsForm");
+	var paramsName = JSON.stringify(saveDate.paramsName);
+	var paramsType = JSON.stringify(saveDate.paramsType);
+	var exampleParams = JSON.stringify(saveDate.exampleParams);
+	saveDate.paramsName = paramsName.substring(1,paramsName.length - 1 );
+	saveDate.paramsType = paramsType.substring(1,paramsType.length - 1 );
+	saveDate.exampleParams = exampleParams.substring(1,exampleParams.length - 1 );
 	$.ajax({
         url: "save",
         type: "post",
-        data: getFormJson("#paramsForm"),
+        data: saveDate,
         success: function(data){
         		list();
         		if(data && data.id){
