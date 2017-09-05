@@ -98,10 +98,12 @@
 							<table id = "params" class = "table table-bordered" style= "margin-top:5px;margin-left: 15px;">
 								<thead>
 									<tr>
-										<th class = "col-md-3">名称</th>
-										<th class = "col-md-3">类型</th>
+										<th class = "col-md-2">名称</th>
+										<th class = "col-md-3">描述</th>
+										<th class = "col-md-1">类型</th>
+										<th class = "col-md-1">必输</th>
 										<th class = "col-md-3">例子</th>
-										<th class = "col-md-3">操作</th>
+										<th class = "col-md-1">操作</th>
 									</tr>
 								</thead>
 								<tbody id = "paramstbody">
@@ -119,7 +121,7 @@
 				<div class="form-group ">
 					<label for="result" class="col-sm-2 control-label">返回结果</label>
 					<div class="col-sm-9">
-						<textarea  class="form-control required" name = "result" id="result" placeholder="返回结果"></textarea>
+						<textarea style = "height: 500px" class="form-control required" name = "result" id="result" placeholder="返回结果"></textarea>
 					</div>
 				</div>
 				<div class="form-group ">
@@ -138,10 +140,19 @@
 					<input type="text" class="form-control required" name = "paramsName" placeholder="参数名称">
 				</td>
 				<td>
+					<input type="text" class="form-control required" name = "paramsDiscription" placeholder="参数描述">
+				</td>
+				<td>
 					<select class = "form-control" name = "paramsType">
 						<option value = "String">String</option>
 						<option value = "Integer">Integer</option>
 						<option value = "Double">Double</option>
+					</select>
+				</td>
+				<td>
+					<select class = "form-control" name = "isRequired">
+						<option value = "false">是</option>
+						<option value = "true">否</option>
 					</select>
 				</td>
 				<td>

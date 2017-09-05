@@ -7,9 +7,10 @@ package app.document.entity;
 public class Params {
 	private Long id;
 	private String paramsName;
-	private String discription;
+	private String paramsDiscription;
 	private String paramsType;
 	private String exampleParams;
+	private String isRequired;
 	private Long apiId;
 	
 	public Long getId() {
@@ -24,11 +25,12 @@ public class Params {
 	public void setParamsName(String paramsName) {
 		this.paramsName = paramsName;
 	}
-	public String getDiscription() {
-		return discription;
+	
+	public String getParamsDiscription() {
+		return paramsDiscription;
 	}
-	public void setDiscription(String discription) {
-		this.discription = discription;
+	public void setParamsDiscription(String paramsDiscription) {
+		this.paramsDiscription = paramsDiscription;
 	}
 	public String getParamsType() {
 		return paramsType;
@@ -48,11 +50,19 @@ public class Params {
 	public void setApiId(Long apiId) {
 		this.apiId = apiId;
 	}
-	public Params(String paramsName, String paramsType, String exampleParams) {
+	
+	public String getIsRequired() {
+		return isRequired;
+	}
+	public void setIsRequired(String isRequired) {
+		this.isRequired = isRequired;
+	}
+	public Params(String paramsName, String paramsType, String exampleParams, String isRequired) {
 		super();
 		this.paramsName = paramsName;
 		this.paramsType = paramsType;
 		this.exampleParams = exampleParams;
+		this.isRequired = isRequired;
 	}
 	public Params() {
 		super();

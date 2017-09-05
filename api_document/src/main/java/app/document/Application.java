@@ -40,6 +40,9 @@ public class Application {
 		dataSource.setUsername(env.getProperty("spring.datasource.username"));//用户名
 		dataSource.setPassword(env.getProperty("spring.datasource.password"));//密码
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		System.out.println(env.getProperty("spring.datasource.url"));
+		System.out.println(env.getProperty("spring.datasource.username"));
+		System.out.println(env.getProperty("spring.datasource.password"));
 		dataSource.setInitialSize(2);
 		dataSource.setMaxActive(20);
 		dataSource.setMinIdle(0);

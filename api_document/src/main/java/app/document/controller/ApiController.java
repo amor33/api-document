@@ -6,6 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,13 +49,17 @@ public class ApiController {
     private List<Params> getParams(HttpServletRequest req) {
     		List<Params> params = new ArrayList<Params>();
     		if(StringUtils.isNotBlank(req.getParameter("paramsType"))){
+//    			JSONObject json=JSONObject.fromObject((String)req.getParameter("paramsType"));
     			String[] paramsType = req.getParameter("paramsType").split(",");
     			String[] paramsName = req.getParameter("paramsName").split(",");
     			String[] exampleParams = req.getParameter("exampleParams").split(",");
+    			String[] isRequireds = req.getParameter("isRequired").split(",");
     			for(int i = 0 ; i<paramsType.length; i++){
-    				params.add( new Params(paramsName[i].substring(1,paramsName[i].length() - 1),
+    				params.add( new Params(
+    						paramsName[i].substring(1,paramsName[i].length() - 1),
     						paramsType[i].substring(1,paramsType[i].length() - 1),
-    						exampleParams[i].substring(1,exampleParams[i].length() - 1)));
+    						exampleParams[i].substring(1,exampleParams[i].length() - 1),
+    						isRequireds[i].substring(1,isRequireds[i].length() - 1)));
     			}
     		}
 		return params.isEmpty() ? null : params;

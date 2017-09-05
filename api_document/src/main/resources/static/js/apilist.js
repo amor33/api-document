@@ -93,12 +93,13 @@ function save(){
 		}
 	}
 	var saveDate = getFormJson("#paramsForm");
-	var paramsName = JSON.stringify(saveDate.paramsName);
-	var paramsType = JSON.stringify(saveDate.paramsType);
-	var exampleParams = JSON.stringify(saveDate.exampleParams);
-	saveDate.paramsName = paramsName.substring(1,paramsName.length - 1 );
-	saveDate.paramsType = paramsType.substring(1,paramsType.length - 1 );
-	saveDate.exampleParams = exampleParams.substring(1,exampleParams.length - 1 );
+	if(saveDate.paramsName){
+		saveDate.paramsName = JSON.stringify(saveDate.paramsName);
+		saveDate.paramsType = JSON.stringify(saveDate.paramsType);
+		saveDate.paramsDiscription = JSON.stringify(saveDate.paramsDiscription);
+		saveDate.exampleParams = JSON.stringify(saveDate.exampleParams);
+		saveDate.isRequired = JSON.stringify(saveDate.isRequired);
+	}
 	$.ajax({
         url: "save",
         type: "post",
