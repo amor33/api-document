@@ -32,7 +32,8 @@ public class ApiService {
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		if(null != params){
 			 for(Params p : params){
-					batchArgs.add(new Object[]{p.getParamsName(),p.getParamsType(),p.getExampleParams(),api.getId()});
+					batchArgs.add(new Object[]{p.getParamsName(),p.getParamsType(),p.getExampleParams(),api.getId()
+							,p.getIsRequired(),p.getParamsDiscription()});
 				}
 				paramsDao.save(batchArgs);
 		 }
@@ -51,5 +52,13 @@ public class ApiService {
 
 	public List<Params> getPatams(Long apiId) {
 		return paramsDao.getParams(apiId);
+	}
+
+	public boolean codeExitis(Long id, String code) {
+		return apiDao.codeExists(code, id);
+	}
+
+	public List<String> project() {
+		return apiDao.project();
 	}
 }

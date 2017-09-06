@@ -57,12 +57,13 @@ public class Params {
 	public void setIsRequired(String isRequired) {
 		this.isRequired = isRequired;
 	}
-	public Params(String paramsName, String paramsType, String exampleParams, String isRequired) {
+	public Params(String paramsName, String paramsType, String exampleParams, String isRequired,String paramsDiscription) {
 		super();
 		this.paramsName = paramsName;
 		this.paramsType = paramsType;
 		this.exampleParams = exampleParams;
 		this.isRequired = isRequired;
+		this.paramsDiscription = paramsDiscription;
 	}
 	public Params() {
 		super();

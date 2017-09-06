@@ -6,14 +6,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONArray;
 
 import app.document.entity.Api;
 import app.document.entity.Params;
@@ -31,7 +30,6 @@ public class ApiController {
     @RequestMapping("/list")
     @ResponseBody
     public ReturnEntity list(){
-    		
         return  ReturnEntity.succeed(apiService.getAllApi());
     }
     
@@ -40,26 +38,36 @@ public class ApiController {
     public List<Params> paramsList(@RequestParam(value="apiId") Long apiId){
         return apiService.getPatams(apiId) ;
     }
-    
+    @RequestMapping("/project")
+    @ResponseBody
+    public List<String> project(){
+        return apiService.project() ;
+    }
     @RequestMapping("/save")
     public  Api save( Api api ,HttpServletRequest req){
         return apiService.update(api,getParams(req)) ;
     }
-    
+    @RequestMapping("/checkcode")
+    public  boolean codeExitis(@RequestParam(value = "apiId",required=false) Long id, @RequestParam(value="code")String code){
+        return apiService.codeExitis(id, code) ;
+    }
     private List<Params> getParams(HttpServletRequest req) {
     		List<Params> params = new ArrayList<Params>();
     		if(StringUtils.isNotBlank(req.getParameter("paramsType"))){
-//    			JSONObject json=JSONObject.fromObject((String)req.getParameter("paramsType"));
-    			String[] paramsType = req.getParameter("paramsType").split(",");
-    			String[] paramsName = req.getParameter("paramsName").split(",");
-    			String[] exampleParams = req.getParameter("exampleParams").split(",");
-    			String[] isRequireds = req.getParameter("isRequired").split(",");
-    			for(int i = 0 ; i<paramsType.length; i++){
-    				params.add( new Params(
-    						paramsName[i].substring(1,paramsName[i].length() - 1),
-    						paramsType[i].substring(1,paramsType[i].length() - 1),
-    						exampleParams[i].substring(1,exampleParams[i].length() - 1),
-    						isRequireds[i].substring(1,isRequireds[i].length() - 1)));
+    			if(req.getParameter("paramsType").startsWith("[") && req.getParameter("paramsType").endsWith("]")){
+    				JSONArray paramsType = JSONArray.parseArray(req.getParameter("paramsType"));
+        			JSONArray paramsName = JSONArray.parseArray(req.getParameter("paramsName"));
+        			JSONArray exampleParams = JSONArray.parseArray(req.getParameter("exampleParams"));
+        			JSONArray isRequireds = JSONArray.parseArray(req.getParameter("isRequired"));
+        			JSONArray paramsDiscription = JSONArray.parseArray(req.getParameter("paramsDiscription"));
+        			for(int i = 0 ; i<paramsType.size(); i++){
+        				params.add( new Params(paramsName.get(i).toString(),paramsType.get(i).toString(),exampleParams.get(i).toString()
+        						,isRequireds.get(i).toString(),paramsDiscription.get(i).toString()));
+        			}
+    			}else{
+    				params.add( new Params(req.getParameter("paramsName").replaceAll("\"",""),
+    						req.getParameter("paramsType").replaceAll("\"",""),req.getParameter("exampleParams").replaceAll("\"",""),
+    						req.getParameter("isRequired").replaceAll("\"",""),req.getParameter("paramsDiscription").replaceAll("\"","")));
     			}
     		}
 		return params.isEmpty() ? null : params;

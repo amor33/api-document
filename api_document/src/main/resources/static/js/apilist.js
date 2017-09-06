@@ -12,6 +12,9 @@ $(function(){
         		{
         			"data": "code" 
         		},
+        		{
+        			"data": "type" 
+        		},
             {
         			"data": "id",
         			render:function(data, type, row){
@@ -54,7 +57,6 @@ $(function(){
 					}
 					
 				})
-//				var formData = $("#api").DataTable().row(self.parents('tr')).data();
 				
 			});
 			$(".API-delete").click(function(e){
@@ -75,6 +77,21 @@ $(function(){
 			});
 		}
     });
+    	
+    var str = "<option  value='政府补贴平台'></option>"
+	$.ajax({
+        url: "project",
+        type: "post",
+        success: function(data){
+        		if(data && data.length > 0){
+        			var str = "";
+        			for(var i = 0; i < data.length ; i++ ){
+        				str = str + "<option  value='" + data[i] + "'>"+ data[i] + "</option>";
+        			}
+        			$("#project").append(str);
+        		}
+        }
+	});
 });
 function removeParams(){
 	var dom = $(event.target);
@@ -92,25 +109,40 @@ function save(){
 			return false;
 		}
 	}
-	var saveDate = getFormJson("#paramsForm");
-	if(saveDate.paramsName){
-		saveDate.paramsName = JSON.stringify(saveDate.paramsName);
-		saveDate.paramsType = JSON.stringify(saveDate.paramsType);
-		saveDate.paramsDiscription = JSON.stringify(saveDate.paramsDiscription);
-		saveDate.exampleParams = JSON.stringify(saveDate.exampleParams);
-		saveDate.isRequired = JSON.stringify(saveDate.isRequired);
-	}
 	$.ajax({
-        url: "save",
+        url: "checkcode",
         type: "post",
-        data: saveDate,
+        data: {
+        		apiId : $("#id").val(),
+        		code : $("#code").val()
+        },
         success: function(data){
-        		list();
-        		if(data && data.id){
-        			alert("操作成功")
+        		if(data){
+        			alert("code重复，请修改重试");
+        			return false;
         		}
+	        	var saveDate = getFormJson("#paramsForm");
+	        	if(saveDate.paramsName){
+	        		saveDate.paramsName = JSON.stringify(saveDate.paramsName);
+	        		saveDate.paramsType = JSON.stringify(saveDate.paramsType);
+	        		saveDate.paramsDiscription = JSON.stringify(saveDate.paramsDiscription);
+	        		saveDate.exampleParams = JSON.stringify(saveDate.exampleParams);
+	        		saveDate.isRequired = JSON.stringify(saveDate.isRequired);
+	        	}
+	        	$.ajax({
+	                url: "save",
+	                type: "post",
+	                data: saveDate,
+	                success: function(data){
+	                		list();
+	                		if(data && data.id){
+	                			alert("操作成功")
+	                		}
+	                }
+	        	});
         }
 	});
+	
 }
 function getFormJson(frm) {
     var o = {};

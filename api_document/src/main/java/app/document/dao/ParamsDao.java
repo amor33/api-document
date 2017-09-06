@@ -12,7 +12,7 @@ import app.document.entity.Params;
 @Repository
 public class ParamsDao {
 	protected final String deleteSql = "delete from params where apiid = ?";
-	protected final String insertSql = "insert into params (paramsname,paramstype,exampleparams,apiid) values (?,?,?,?)";
+	protected final String insertSql = "insert into params (paramsname,paramstype,exampleparams,apiid,isrequired,paramsdiscription) values (?,?,?,?,?,?)";
 	protected final String selectSql = "select * from params where apiId = ?" ;
     @Autowired
     private JdbcTemplate jdbcTemplate ;
