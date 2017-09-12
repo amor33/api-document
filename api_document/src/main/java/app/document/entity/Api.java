@@ -17,6 +17,8 @@ public class Api {
     private String project;
     private String uri;
     private String result;
+    private String author;
+    private String authType;
     private String exampleUri;
     private List<Params> params;
     
@@ -74,6 +76,19 @@ public class Api {
 	}
 	public void setExampleUri(String exampleUri) {
 		this.exampleUri = exampleUri;
+	}
+	
+	public String getAuthType() {
+		return authType;
+	}
+	public void setAuthType(String authType) {
+		this.authType = authType;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 	public List<Params> getParams() {
 		return params;

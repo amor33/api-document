@@ -2,7 +2,6 @@ package app.document.dao;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +13,7 @@ import app.document.entity.Api;
 public class ApiDao {
 	protected final String deleteSql = "delete from api where id = ?";
 	protected final String selectSql = "select * from api";
-	protected final String saveSql = "insert into api (code,discription,exampleuri,name,project,result,type,uri) values(?,?,?,?,?,?,?,?)";
+	protected final String saveSql = "insert into api (code,discription,exampleuri,name,project,result,type,uri,author,authtype) values(?,?,?,?,?,?,?,?,?,?)";
 	protected final String saveReturnSql = "select * from api where code = ?";
 	protected final String projectSql = "select project from project";
    
@@ -36,7 +35,7 @@ public class ApiDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Api save(Api api) {
 		jdbcTemplate.update(saveSql,new Object[]{api.getCode(),api.getDiscription(),api.getExampleUri(),api.getName()
-				,api.getProject(),api.getResult(),api.getType(),api.getUri()});
+				,api.getProject(),api.getResult(),api.getType(),api.getUri(),api.getAuthor(),api.getAuthType()});
 		return (Api) jdbcTemplate.queryForObject(saveReturnSql, new BeanPropertyRowMapper(Api.class),api.getCode());
 	}
 

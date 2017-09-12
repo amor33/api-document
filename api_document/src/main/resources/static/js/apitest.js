@@ -1,11 +1,10 @@
 $(function(){
-    var datatable = $('#api').DataTable({
-        "ajax": 'list',
+    var datatable = $('#apitest').DataTable({
+        "ajax": {
+        		"url":"apitestlist",
+        },
         "paging": false,
         "columns": [
-        		{
-        			"data": "project" 
-        		},
         		{
         			"data": "name" 
         		},
@@ -13,19 +12,19 @@ $(function(){
         			"data": "code" 
         		},
         		{
+        			"data": "url" 
+        		},
+        		{
         			"data": "type" 
         		},
         		{
-        			"data": "authType" 
-        		},
-        		{
-        			"data": "author" 
+        			"data": "count" 
         		},
             {
         			"data": "id",
         			render:function(data, type, row){
         				var btnCon = $("<div class='btn-group'>");
-                    var btnEdit = $("<a class=' btn btn-sm btn-primary API-update' data-id="+data+"><i class='fa fa-edit'></i> 编辑</a>");
+                    var btnEdit = $("<a class=' btn btn-sm btn-primary API-update' data-id="+data+"><i class='fa fa-edit'></i> 明细</a>");
                     var btRemove = $("<a class='btn btn-sm btn-default API-delete' data-id="+data+"><i class='fa fa-trash-o'></i>删除</a>");
                     	 btnCon.append(btnEdit);
                     	 btnCon.append(btRemove);
@@ -36,43 +35,18 @@ $(function(){
         drawCallback: function() {
 			$(".API-update").click(function(e){
 				var id = $(e.target).attr("data-id");
-				add();
-				var formData = $("#api").DataTable().row($(e.target).parents('tr')).data();
-				
-				for(var i in formData){
-					$("#"+i).val(formData[i]);
-				}
-				
-				$.ajax({
-					url:"paramslist",
-					method:"POST",
-					dataType:"json",
-					data:{
-						apiId:formData.id
-					},
-					success:function(data){
-						if(data){
-							for(var i in data){
-								$("#paramstbody").append($("#example tr")[0].outerHTML);
-								for(var j in data[i]){
-									$("#paramstbody tr:eq("+i+") [name='"+j+"']").val(data[i][j]);
-								}
-							}
-							
-						}
-					}
-					
-				})
-				
+				$("#mainId").val(id);
+				$("#apitestdetail").DataTable().ajax.reload(null,false);
+				detail();
 			});
 			$(".API-delete").click(function(e){
 				var id = $(e.target).attr("data-id");
 				$.ajax({
-					url:"delete",
+					url:"apitestdelete",
 					method:"POST",
 					dataType:"json",
 					data:{
-						apiId:id
+						id:id
 					},
 					success:function(data){
 						datatable.ajax.reload(null,false);
@@ -83,21 +57,40 @@ $(function(){
 			});
 		}
     });
-    	
-    var str = "<option  value='政府补贴平台'></option>"
-	$.ajax({
-        url: "project",
-        type: "post",
-        success: function(data){
-        		if(data && data.length > 0){
-        			var str = "";
-        			for(var i = 0; i < data.length ; i++ ){
-        				str = str + "<option  value='" + data[i] + "'>"+ data[i] + "</option>";
+    var datatableDetail = $('#apitestdetail').DataTable({
+        "ajax": {
+        		url:"apitestdetail",
+        		data:function(){
+        			return {
+        				"mainId":$("#mainId").val()
         			}
-        			$("#project").append(str);
         		}
-        }
-	});
+        },
+        "paging": false,
+        "columns": [
+        		{
+        			"data": "start" ,
+        			render: function(data, type, row) {
+        				return moment(data).format("YYYY-MM-DD HH:mm:ss");
+        			}
+        		},
+        		{
+        			"data": "end" ,
+        			render: function(data, type, row) {
+        				return moment(data).format("YYYY-MM-DD HH:mm:ss");
+        			}
+        		},
+        		{
+        			"data": "time"
+        		},
+        		{
+        			"data": "status" 
+        		},
+        		{
+        			"data": "result" 
+        		}
+        ],
+    });
 });
 function removeParams(){
 	var dom = $(event.target);
@@ -128,21 +121,18 @@ function save(){
         			return false;
         		}
 	        	var saveDate = getFormJson("#paramsForm");
-	        	if(saveDate.paramsName){
-	        		saveDate.paramsName = JSON.stringify(saveDate.paramsName);
-	        		saveDate.paramsType = JSON.stringify(saveDate.paramsType);
-	        		saveDate.paramsDiscription = JSON.stringify(saveDate.paramsDiscription);
-	        		saveDate.exampleParams = JSON.stringify(saveDate.exampleParams);
-	        		saveDate.isRequired = JSON.stringify(saveDate.isRequired);
+	        	if(Object.prototype.toString.call(saveDate.key)=='[object Array]'){
+	        		saveDate.key = JSON.stringify(saveDate.key);
+	        		saveDate.value = JSON.stringify(saveDate.value);
 	        	}
 	        	$.ajax({
-	                url: "save",
+	                url: "apitestsave",
 	                type: "post",
 	                data: saveDate,
 	                success: function(data){
 	                		list();
-	                		if(data && data.id){
-	                			alert("操作成功")
+	                		if(data && data=="OK"){
+	                			alert("操作成功，请稍后查看结果")
 	                		}
 	                }
 	        	});
@@ -167,10 +157,18 @@ function getFormJson(frm) {
 }
 function add(){
 	cleanForm();
+	
 	$(".J-grid").addClass("hidden");
 	$(".J-form").removeClass("hidden");
 	$("#addButton").addClass("hidden");
-	
+	$("#returnButton").removeClass("hidden");
+}
+function detail(){
+	$(".J-grid").addClass("hidden");
+	$("#addButton").addClass("hidden");
+	$(".J-gridDetail").removeClass("hidden");
+	$("#returnButton").removeClass("hidden");
+	$("#excelButton").removeClass("hidden");
 }
 function cleanForm(){
 	var saveTexts = $("#paramsForm input");
@@ -180,9 +178,16 @@ function cleanForm(){
 	$("#result").val("");
 	$("#paramstbody").html("");
 }
+function excel(){
+	var url = "excel?mainId="+$("#mainId").val();
+	window.open(url);
+}
 function list(){
-	$("#api").DataTable().ajax.reload(null,false);
+	$("#apitest").DataTable().ajax.reload(null,false);
 	$(".J-grid").removeClass("hidden");
 	$(".J-form").addClass("hidden");
+	$(".J-gridDetail").addClass("hidden");
 	$("#addButton").removeClass("hidden");
+	$("#returnButton").addClass("hidden");
+	$("#excelButton").addClass("hidden");
 }

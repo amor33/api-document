@@ -38,6 +38,8 @@
 						<th>名称</th>
 						<th>编号</th>
 						<th>请求方式</th>
+						<th>认证方式</th>
+						<th>作者</th>
 						<th>操作</th>
 					</tr>
 				</thead>
@@ -58,6 +60,15 @@
 						<select name = "type" id="type" class="form-control">
 							<option value="POST">POST</option>
 							<option value="GET">GET</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label class="col-sm-4 control-label">认证方式</label>
+					<div class="col-sm-8">
+						<select name = "authType" id="authType" class="form-control">
+							<option value="Token">Token</option>
+							<option value="Cookie">Cookie</option>
 						</select>
 					</div>
 				</div>
@@ -84,6 +95,12 @@
 					<label for="discription" class="col-sm-4 control-label">描述</label>
 					<div class="col-sm-8">
 						<input type="text" class="form-control required" name = "discription" id="discription" placeholder="描述">
+					</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="author" class="col-sm-4 control-label">作者</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control required" name = "author" id="author" placeholder="作者">
 					</div>
 				</div>
 				<div class="form-group ">
